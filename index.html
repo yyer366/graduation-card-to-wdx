@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>给德祥的一封毕业信</title>
+
+  <style>
+    :root {
+      --bg-1: #f8efe2;
+      --bg-2: #ead8bd;
+      --paper: #fffaf1;
+      --paper-deep: #f7ead7;
+      --ink: #48382b;
+      --muted: #8c7059;
+      --gold: #c49a54;
+      --rose: #b96d76;
+      --envelope: #e4caa4;
+      --envelope-dark: #d1ad7c;
+      --shadow: rgba(70, 45, 24, 0.24);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "STSong", "Songti SC", "SimSun", "Microsoft YaHei", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.85), transparent 26%),
+        radial-gradient(circle at 80% 18%, rgba(255, 241, 210, 0.75), transparent 28%),
+        linear-gradient(145deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+      background-size: 44px 44px;
+      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .petals {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .petal {
+      position: absolute;
+      top: -40px;
+      color: rgba(177, 122, 89, 0.45);
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translate3d(0, -40px, 0) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.85;
+      }
+
+      100% {
+        transform: translate3d(42px, 110vh, 0) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .music-button {
+      position: fixed;
+      right: 18px;
+      top: 18px;
+      z-index: 20;
+      border: 1px solid rgba(139, 104, 69, 0.24);
+      background: rgba(255, 250, 241, 0.78);
+      backdrop-filter: blur(12px);
+      color: #6f513b;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(85, 55, 25, 0.12);
+    }
+
+    .music-button.playing::before {
+      content: "♪ ";
+    }
+
+    .stage {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: 42px 18px 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cover-title {
+      margin: 34px 0 22px;
+      text-align: center;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .cover-title h1 {
+      margin: 0;
+      font-size: clamp(30px, 7vw, 54px);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #6a4a35;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .cover-title p {
+      margin: 12px 0 0;
+      font-size: 15px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .envelope-scene {
+      width: min(380px, 86vw);
+      height: 270px;
+      position: relative;
+      margin-top: 28px;
+      cursor: pointer;
+      perspective: 1200px;
+      transition: transform 1.1s ease, opacity 0.8s ease;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      filter: drop-shadow(0 22px 32px rgba(75, 47, 22, 0.24));
+    }
+
+    .envelope-back {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 210px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ebd5b2, var(--envelope));
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .envelope-back::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 105px 0 105px 190px;
+      border-color: transparent transparent transparent #d7b78c;
+      z-index: 3;
+    }
+
+    .envelope-back::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 105px 190px 105px 0;
+      border-color: transparent #cfaa7b transparent transparent;
+      z-index: 3;
+    }
+
+    .envelope-front {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 210px;
+      z-index: 4;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    .envelope-front::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 190px 138px 190px;
+      border-color: transparent transparent #e6c797 transparent;
+    }
+
+    .flap {
+      position: absolute;
+      left: 0;
+      top: 58px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 122px 190px 0 190px;
+      border-color: #f0ddbf transparent transparent transparent;
+      transform-origin: top center;
+      transition: transform 1.15s cubic-bezier(.2,.72,.18,1);
+      z-index: 7;
+    }
+
+    .seal {
+      position: absolute;
+      left: 50%;
+      top: 148px;
+      width: 64px;
+      height: 64px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #cf8b93, var(--rose));
+      color: #fff8ee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      z-index: 8;
+      box-shadow:
+        inset 0 2px 8px rgba(255, 255, 255, 0.2),
+        0 8px 18px rgba(99, 39, 44, 0.28);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .seal::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 1px solid rgba(255, 244, 229, 0.65);
+      border-radius: 50%;
+    }
+
+    .open-hint {
+      margin-top: 18px;
+      color: #8b6c52;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      animation: breathe 2s ease-in-out infinite;
+      text-align: center;
+      transition: opacity 0.6s ease;
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        opacity: 0.56;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateY(-4px);
+      }
+    }
+
+    .letter-wrap {
+      width: min(880px, 94vw);
+      margin-top: 18px;
+      opacity: 0;
+      transform: translateY(80px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 1s ease 0.45s, transform 1s ease 0.45s;
+    }
+
+    .letter-paper {
+      position: relative;
+      max-height: min(78vh, 820px);
+      overflow-y: auto;
+      padding: clamp(24px, 5vw, 54px);
+      background:
+        linear-gradient(90deg, rgba(180, 128, 70, 0.07) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,250,241,0.94)),
+        var(--paper);
+      background-size: 36px 100%, auto, auto;
+      border: 1px solid rgba(143, 105, 67, 0.22);
+      border-radius: 22px;
+      box-shadow:
+        0 26px 70px var(--shadow),
+        inset 0 0 0 1px rgba(255,255,255,0.65);
+    }
+
+    .letter-paper::before,
+    .letter-paper::after {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-color: rgba(151, 112, 65, 0.35);
+      pointer-events: none;
+    }
+
+    .letter-paper::before {
+      top: 18px;
+      left: 18px;
+      border-top: 1px solid;
+      border-left: 1px solid;
+    }
+
+    .letter-paper::after {
+      right: 18px;
+      bottom: 18px;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+    }
+
+    .letter-head {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .letter-head .eyebrow {
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      margin-bottom: 10px;
+    }
+
+    .letter-head h2 {
+      margin: 0;
+      color: #5c422f;
+      font-size: clamp(26px, 6vw, 40px);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+    }
+
+    .letter-head .line {
+      width: 92px;
+      height: 1px;
+      margin: 18px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .letter-content {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .letter-content p {
+      margin: 0 0 20px;
+      font-size: clamp(16px, 3.8vw, 18px);
+      line-height: 2.05;
+      text-align: justify;
+      text-indent: 2em;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: paragraphIn 0.8s ease forwards;
+      animation-delay: calc(0.55s + var(--i) * 0.08s);
+    }
+
+    .letter-content p.no-indent {
+      text-indent: 0;
+    }
+
+    @keyframes paragraphIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .signature {
+      max-width: 760px;
+      margin: 34px auto 0;
+      text-align: right;
+      color: #604934;
+      font-size: clamp(16px, 3.8vw, 18px);
+      line-height: 2;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: paragraphIn 0.9s ease forwards;
+      animation-delay: 1.3s;
+    }
+
+    .scroll-note {
+      margin-top: 18px;
+      text-align: center;
+      color: #9a7d63;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .stage.opened .cover-title {
+      opacity: 0;
+      transform: translateY(-26px);
+      pointer-events: none;
+    }
+
+    .stage.opened .flap {
+      transform: rotateX(180deg);
+    }
+
+    .stage.opened .seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.65);
+    }
+
+    .stage.opened .envelope-scene {
+      transform: translateY(-42px) scale(0.82);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .stage.opened .open-hint {
+      opacity: 0;
+    }
+
+    .stage.opened .letter-wrap {
+      opacity: 1;
+      transform: translateY(-120px) scale(1);
+      pointer-events: auto;
+    }
+
+    @media (max-width: 640px) {
+      .stage {
+        padding-top: 34px;
+      }
+
+      .music-button {
+        right: 12px;
+        top: 12px;
+        font-size: 12px;
+      }
+
+      .envelope-scene {
+        height: 238px;
+      }
+
+      .envelope-back,
+      .envelope-front {
+        height: 185px;
+      }
+
+      .envelope-back::before {
+        border-width: 92px 0 92px 43vw;
+      }
+
+      .envelope-back::after {
+        border-width: 92px 43vw 92px 0;
+      }
+
+      .envelope-front::before {
+        border-width: 0 43vw 122px 43vw;
+      }
+
+      .flap {
+        top: 53px;
+        border-width: 105px 43vw 0 43vw;
+      }
+
+      .seal {
+        top: 128px;
+      }
+
+      .letter-wrap {
+        width: 94vw;
+      }
+
+      .letter-paper {
+        max-height: 80vh;
+        padding: 26px 18px 34px;
+        border-radius: 18px;
+      }
+
+      .stage.opened .letter-wrap {
+        transform: translateY(-112px) scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="music-button" id="musicButton" type="button">音乐</button>
+
+  <div class="petals" id="petals"></div>
+
+  <main class="stage" id="stage">
+    <section class="cover-title">
+      <h1>致德祥</h1>
+      <p>毕业快乐 · 请查收这封信</p>
+    </section>
+
+    <section class="envelope-scene" id="envelopeScene" aria-label="点击打开信封">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="envelope-back"></div>
+        <div class="envelope-front"></div>
+        <div class="seal">开启</div>
+      </div>
+    </section>
+
+    <div class="open-hint" id="openHint">轻点信封，慢慢打开</div>
+
+    <section class="letter-wrap" id="letterWrap">
+      <article class="letter-paper">
+        <header class="letter-head">
+          <div class="eyebrow">A LETTER FOR YOU</div>
+          <h2>毕业快乐</h2>
+          <div class="line"></div>
+        </header>
+
+        <div class="letter-content" id="letterContent"></div>
+
+        <div class="signature">
+          袁燕<br />
+          2026.07.01<br />
+          中国海洋大学
+        </div>
+
+        <div class="scroll-note">谢谢你慢慢读到这里，也谢谢你出现在我的青春里。</div>
+      </article>
+    </section>
+  </main>
+
+  <audio id="bgm" src="zhyy.flac" preload="auto" loop></audio>
+
+  <script>
+    const letterParagraphs = [
+      "你好呀德祥：",
+      "毕业快乐！",
+      "写下这句话的时候，我突然有一点舍不得。好像我们第一次遇见还在昨天，那个十一假期，我去了工程学院的乒乓球场打球，正好看见你和朋友在打球。你穿着深蓝色的T恤，打球很专注，也很灵活。那时候我只是觉得，这个人球打得挺好，人也挺清爽，却没有想到，后来你会慢慢走进我的生活里，成为我这么在意的人。",
+      "后来我们又在信息北楼负一楼的乒乓球馆遇见。那天我刚考完软件能力上机考试，只是想去打会儿球放松一下，却又刚好看见了你。世界上有些相遇，好像就是这样，看起来很偶然，后来想想，却又像命运悄悄安排好的一样。后来我想起那句歌词：“因为我刚好遇见你，留下足迹才美丽”，原来有些普通的日子，真的会因为遇见一个人，而变得特别起来。",
+      "那天我们一起打了球。走之前，我加了你的微信，说你打球很厉害，希望多多指教。其实那时候的我，也许已经在心里悄悄期待着，之后还能再见到你。",
+      "再后来，我常常在球馆看见你。你打球的样子很好看，认真、轻快，也有一点少年气。有一次我坐在旁边休息，看着你打球，看见你的侧脸、金色眼镜框、干净的发型和简单清爽的衣服。那一眼，我记了很久很久。可能就是从那个瞬间开始，我的很多小心思、很多刻意的靠近，都有了原因。",
+      "我曾经以为自己是一个很理性的人，不会轻易为谁心动，也不会把一个瞬间记得那么久。可是遇见你之后，我才发现，在意一个人有时候真的很简单。也许只是因为某一次抬头，某一次对视，某一段一起走过的路，某一句你很自然说出口的话。也许更简单一点，只是因为你是你。",
+      "我喜欢和你一起打球，也喜欢和你一起走回宿舍的路。你推着车，我背着包，我们慢慢往前走。你会和我讲小时候的事，讲高中老师，讲打雪仗，讲赛车，讲你打乒乓球的经历。我就在旁边静静地听着，听到有趣的地方就笑一笑，插上几句。那时候周围有点暗，路上也没有很多人，好像整个世界都轻轻安静下来，只剩下你和我。",
+      "我喜欢那样的时刻。喜欢走在你身边，喜欢听你讲话，喜欢天冷的时候把手放进你的口袋里，喜欢那一点点踏实又温暖的感觉。喜欢大海，喜欢下雪，喜欢小麦岛的黄昏和落日，也喜欢黄昏和落日旁边的你。",
+      "我们因为乒乓球认识，又一起走过了很多普通却珍贵的日子。一起散步，一起出去玩，一起自习，一起画画，一起唱歌，一起看海边的夕阳。那些时刻没有惊天动地，却都被我认真地放在心里。因为是和你一起，所以普通的日子也变得很亮。",
+      "现在，你本科毕业了，我也硕士毕业了。我们好像都站在一个新的路口，接下来会有新的城市、新的生活，也可能会有一段需要慢慢适应的距离。想到这些，我当然会有一点不舍，也会有一点担心。可是我还是很想相信我们，相信那个一起走过很多路的我们，也相信愿意为彼此靠近的我们。",
+      "“海上生明月，天涯共此时”，如果以后我们有时不能常常见面，我也希望我们能在不同的地方，看着同一轮月亮，想着同一个未来。距离也许会让见面变得不容易，但我希望，它不会让我们变远。",
+      "你曾经问过我，我们什么时候结婚呢。那一刻我记得很清楚。也许五年听起来有一点长，可是如果那个人是你，我愿意认真地、慢慢地，和你一起去试一试。理想的恋爱和婚姻，应该是两个人都愿意向对方走去。而我想告诉你，我愿意向你走去，也希望你一直向我走来。",
+      "谢谢你出现在我的毕业时光里，也谢谢你让我知道，原来心动可以这么具体：是深蓝色的T恤，是乒乓球桌旁的一次抬头，是回宿舍路上的并肩，是冬天口袋里的温度，是小麦岛的落日，也是我看向你时，心里很轻很轻的一声欢喜。",
+      "毕业快乐！",
+      "愿你以后依然明亮、自由、坚定，依然认真打球，认真生活，认真奔向你想要的未来。也希望未来的很多年里，我们还能一起看海、看雪、看很多很多次落日，一起走很长很长的路。"
+    ];
+
+    const stage = document.getElementById("stage");
+    const envelopeScene = document.getElementById("envelopeScene");
+    const letterWrap = document.getElementById("letterWrap");
+    const letterContent = document.getElementById("letterContent");
+    const musicButton = document.getElementById("musicButton");
+    const bgm = document.getElementById("bgm");
+    const petals = document.getElementById("petals");
+
+    let opened = false;
+    let rendered = false;
+
+    function renderLetter() {
+      if (rendered) return;
+      rendered = true;
+
+      letterParagraphs.forEach((text, index) => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        p.style.setProperty("--i", index);
+
+        if (index === 0 || index === 1 || text === "毕业快乐！") {
+          p.classList.add("no-indent");
+        }
+
+        letterContent.appendChild(p);
+      });
+    }
+
+    async function playMusic() {
+      try {
+        bgm.volume = 0.42;
+        await bgm.play();
+        musicButton.classList.add("playing");
+        musicButton.textContent = "暂停";
+      } catch (error) {
+        musicButton.textContent = "点我播放";
+      }
+    }
+
+    function pauseMusic() {
+      bgm.pause();
+      musicButton.classList.remove("playing");
+      musicButton.textContent = "音乐";
+    }
+
+    function openLetter() {
+      if (opened) return;
+
+      opened = true;
+      renderLetter();
+
+      stage.classList.add("opened");
+      playMusic();
+
+      setTimeout(() => {
+        letterWrap.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }, 900);
+    }
+
+    envelopeScene.addEventListener("click", openLetter);
+
+    musicButton.addEventListener("click", () => {
+      if (bgm.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
+    });
+
+    function createPetals() {
+      const symbols = ["✦", "❀", "·", "✧", "♡"];
+
+      for (let i = 0; i < 30; i++) {
+        const item = document.createElement("span");
+        item.className = "petal";
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        item.style.left = Math.random() * 100 + "vw";
+        item.style.fontSize = 12 + Math.random() * 14 + "px";
+        item.style.animationDuration = 8 + Math.random() * 10 + "s";
+        item.style.animationDelay = Math.random() * 8 + "s";
+        petals.appendChild(item);
+      }
+    }
+
+    createPetals();
+  </script>
+</body>
+</html>
