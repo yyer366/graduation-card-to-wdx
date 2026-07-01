@@ -104,7 +104,114 @@
     .music-button.playing::before {
       content: "♪ ";
     }
+    /*css password begin*/
+    .password-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(70, 48, 31, 0.28);
+      backdrop-filter: blur(10px);
+    }
 
+    .password-mask.show {
+      display: flex;
+    }
+
+    .password-box {
+      width: min(360px, 92vw);
+      padding: 28px 24px 24px;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(255, 246, 232, 0.96));
+      box-shadow: 0 24px 70px rgba(62, 39, 21, 0.28);
+      border: 1px solid rgba(160, 116, 72, 0.22);
+      text-align: center;
+    }
+    /*css password begin*/
+    .password-mask.show .password-box {
+      animation: passwordIn 0.38s ease forwards;
+    }
+
+    @keyframes passwordIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    /*css password end*/
+    .password-title {
+      font-size: 22px;
+      color: #5f4330;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .password-subtitle {
+      font-size: 13px;
+      color: #9a7b61;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .password-input {
+      width: 100%;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(142, 100, 61, 0.28);
+      background: rgba(255, 255, 255, 0.82);
+      padding: 0 18px;
+      font-size: 15px;
+      color: #5b4330;
+      outline: none;
+      text-align: center;
+    }
+
+    .password-input:focus {
+      border-color: rgba(196, 154, 84, 0.8);
+      box-shadow: 0 0 0 3px rgba(196, 154, 84, 0.16);
+    }
+
+    .password-error {
+      min-height: 22px;
+      margin-top: 10px;
+      color: #b45c64;
+      font-size: 13px;
+    }
+
+    .password-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .password-actions button {
+      flex: 1;
+      height: 40px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .password-cancel {
+      background: #efe1cf;
+      color: #74563d;
+    }
+
+    .password-confirm {
+      background: #b96d76;
+      color: #fff8ee;
+    }
+    /*css password end*/
     .stage {
       position: relative;
       z-index: 2;
@@ -499,7 +606,29 @@
 
 <body>
   <button class="music-button" id="musicButton" type="button">音乐</button>
+  <!--html password begin-->
+  <div class="password-mask" id="passwordMask">
+    <div class="password-box">
+      <div class="password-title">开启这封信</div>
+      <div class="password-subtitle">输入那个我一直想听的暗号，信封会慢慢展开~</div>
 
+      <input
+        class="password-input"
+        id="passwordInput"
+        type="password"
+        placeholder="输入密码"
+        autocomplete="off"
+      />
+
+      <div class="password-error" id="passwordError"></div>
+
+      <div class="password-actions">
+        <button class="password-cancel" id="passwordCancel" type="button">返回</button>
+        <button class="password-confirm" id="passwordConfirm" type="button">开启</button>
+      </div>
+    </div>
+  </div>
+  <!--html password end-->
   <div class="petals" id="petals"></div>
 
   <main class="stage" id="stage">
@@ -569,7 +698,14 @@
     const musicButton = document.getElementById("musicButton");
     const bgm = document.getElementById("bgm");
     const petals = document.getElementById("petals");
-
+    // javascript password begin
+    const passwordMask = document.getElementById("passwordMask");
+    const passwordInput = document.getElementById("passwordInput");
+    const passwordError = document.getElementById("passwordError");
+    const passwordCancel = document.getElementById("passwordCancel");
+    const passwordConfirm = document.getElementById("passwordConfirm");
+    const CARD_PASSWORD = "yyer is my baba";
+    // javascript password end
     let opened = false;
     let rendered = false;
 
@@ -606,7 +742,47 @@
       musicButton.classList.remove("playing");
       musicButton.textContent = "音乐";
     }
+    // javascript password begin
+    function showPasswordBox() {
+      if (opened) return;
+      playMusic();
+      passwordMask.classList.add("show");
+      passwordInput.value = "";
+      passwordError.textContent = "";
 
+      setTimeout(() => {
+        passwordInput.focus();
+      }, 80);
+    }
+
+    function hidePasswordBox() {
+      passwordMask.classList.remove("show");
+      passwordInput.value = "";
+      passwordError.textContent = "";
+    }
+
+    function checkPassword() {
+      const value = passwordInput.value.trim();
+
+      if (value === CARD_PASSWORD) {
+        hidePasswordBox();
+        openLetter();
+      } else {
+        passwordError.textContent = "暗号好像不对哦，再试一次？";
+        passwordInput.select();
+      }
+    }
+
+    passwordConfirm.addEventListener("click", checkPassword);
+
+    passwordCancel.addEventListener("click", hidePasswordBox);
+
+    passwordInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        checkPassword();
+      }
+    });
+    // javascript password end
     function openLetter() {
       if (opened) return;
 
@@ -623,9 +799,10 @@
         });
       }, 900);
     }
-
-    envelopeScene.addEventListener("click", openLetter);
-
+    // javascript password begin
+    // envelopeScene.addEventListener("click", openLetter);
+    envelopeScene.addEventListener("click", showPasswordBox);
+    // javascript password end
     musicButton.addEventListener("click", () => {
       if (bgm.paused) {
         playMusic();
